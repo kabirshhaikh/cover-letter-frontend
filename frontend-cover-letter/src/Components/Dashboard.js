@@ -1,14 +1,66 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FullPage, Slide } from "react-full-page";
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [user, setUserData] = useState(null);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+
+  const logout = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/users/logout", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        localStorage.clear();
+        alert("Successfully logged out");
+        navigate("/login");
+      } else {
+        const errorData = await response.json();
+        console.log("Error data:", errorData);
+      }
+    } catch (error) {
+      console.log("Error with logout:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8080/api/users/user-details",
+          {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserData(data);
+        } else {
+          const errorData = await response.json();
+          console.log("error", errorData);
+        }
+      } catch (error) {
+        console.log("Error while fetching the user data:", error);
+      }
+    };
+    fetchUserDetails();
+  }, []);
 
   return (
     <FullPage scrollMode="full-page" duration={1000}>
@@ -87,7 +139,7 @@ const Dashboard = () => {
                     textAlign: "left",
                     cursor: "pointer",
                   }}
-                  onClick={() => navigate("/logout")}
+                  onClick={logout}
                 >
                   Logout
                 </button>
@@ -101,7 +153,7 @@ const Dashboard = () => {
               marginBottom: "1rem",
             }}
           >
-            Welcome Back!
+            Welcome Back {user ? user.firstName : "null"}
           </h1>
           <p
             style={{

@@ -17,20 +17,20 @@ const Home = () => {
             alignItems: "center",
             flexDirection: "column",
             color: "#fff",
+            padding: "20px",
+            textAlign: "center",
           }}
         >
-          <h1 style={{ fontSize: "4rem", marginBottom: "1rem" }}>
+          <h1 style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)", marginBottom: "1rem" }}>
             Cover Letter Generator
           </h1>
           <p
             style={{
-              fontSize: "1.5rem",
+              fontSize: "clamp(1rem, 3vw, 1.5rem)",
               maxWidth: "600px",
-              textAlign: "center",
             }}
           >
-            Effortlessly create professional cover letters tailored to your job
-            applications.
+            Effortlessly create professional cover letters tailored to your job applications.
           </p>
         </div>
       </Slide>
@@ -49,13 +49,20 @@ const Home = () => {
             padding: "50px",
           }}
         >
-          <h2 style={{ fontSize: "3rem", color: "#333", marginBottom: "1rem" }}>
+          <h2
+            style={{
+              fontSize: "clamp(2rem, 4vw, 3rem)",
+              color: "#333",
+              marginBottom: "1rem",
+              textAlign: "center",
+            }}
+          >
             Why Choose Us?
           </h2>
           <div
             style={{
               display: "flex",
-              gap: "30px",
+              gap: "20px",
               flexWrap: "wrap",
               justifyContent: "center",
             }}
@@ -79,7 +86,7 @@ const Home = () => {
                 key={index}
                 style={{
                   textAlign: "center",
-                  padding: "30px",
+                  padding: "20px",
                   borderRadius: "15px",
                   background:
                     "linear-gradient(to bottom right, #ffffff, #e9ecef)",
@@ -99,10 +106,23 @@ const Home = () => {
                   e.target.style.boxShadow = "0px 4px 6px rgba(0, 0, 0, 0.1)";
                 }}
               >
-                <h3 style={{ color: "#007bff", marginBottom: "1rem" }}>
+                <h3
+                  style={{
+                    fontSize: "clamp(1.5rem, 3vw, 2rem)",
+                    color: "#007bff",
+                    marginBottom: "1rem",
+                  }}
+                >
                   {feature.title}
                 </h3>
-                <p style={{ color: "#555" }}>{feature.description}</p>
+                <p
+                  style={{
+                    fontSize: "clamp(1rem, 2.5vw, 1.2rem)",
+                    color: "#555",
+                  }}
+                >
+                  {feature.description}
+                </p>
               </div>
             ))}
           </div>
@@ -121,17 +141,20 @@ const Home = () => {
             justifyContent: "center",
             alignItems: "center",
             color: "#fff",
-            padding: "50px",
+            padding: "20px",
+            textAlign: "center",
           }}
         >
-          <h2 style={{ fontSize: "3rem", marginBottom: "1rem" }}>
+          <h2 style={{ fontSize: "clamp(2rem, 4vw, 3rem)", marginBottom: "1rem" }}>
             Ready to Create Your First Cover Letter?
           </h2>
           <div
             style={{
               display: "flex",
-              gap: "20px",
+              flexWrap: "wrap",
+              gap: "15px",
               marginTop: "20px",
+              justifyContent: "center",
             }}
           >
             <Link
@@ -142,7 +165,7 @@ const Home = () => {
                 borderRadius: "8px",
                 background: "linear-gradient(to right, #ff416c, #ff4b2b)",
                 color: "#fff",
-                fontSize: "1.2rem",
+                fontSize: "clamp(1rem, 2.5vw, 1.2rem)",
                 cursor: "pointer",
                 textDecoration: "none",
                 textAlign: "center",
@@ -168,7 +191,7 @@ const Home = () => {
                 borderRadius: "8px",
                 background: "linear-gradient(to right, #6a11cb, #2575fc)",
                 color: "#fff",
-                fontSize: "1.2rem",
+                fontSize: "clamp(1rem, 2.5vw, 1.2rem)",
                 cursor: "pointer",
                 textDecoration: "none",
                 textAlign: "center",
