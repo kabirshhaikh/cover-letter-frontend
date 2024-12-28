@@ -5,6 +5,7 @@ import Login from "./Components/Login";
 import Register from "./Components/Register";
 import Dashboard from "./Components/Dashboard";
 import GenerateCoverLetter from "./Components/GenerateCoverLetter";
+import ViewCoverLetters from "./Components/ViewCoverLetters";
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
       <Route path="/register" element={<Register />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/generate-cover-letter" element={<GenerateCoverLetter />} />
+      <Route path="/view-cover-letters" element={<ViewCoverLetters />} />
     </Routes>
   );
 };
