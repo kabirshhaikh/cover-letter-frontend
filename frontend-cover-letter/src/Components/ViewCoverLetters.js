@@ -66,9 +66,9 @@ const ViewCoverLetters = () => {
       );
 
       if (response.ok) {
-       const data = await response.json();
-       const link = data.link;
-      window.open(link, "_blank");
+        const data = await response.json();
+        const link = data.link;
+        window.open(link, "_blank");
       } else {
         const errorData = await response.json();
         console.log("Error data: ", errorData);
@@ -86,7 +86,7 @@ const ViewCoverLetters = () => {
         navigate("/login");
         return;
       }
-  
+
       const response = await fetch(
         `http://localhost:8080/api/cover-letter/resume/${resumeID}/download`,
         {
@@ -96,11 +96,11 @@ const ViewCoverLetters = () => {
           },
         }
       );
-  
+
       if (response.ok) {
-        const data = await response.json();  
+        const data = await response.json();
         const link = data.link;
-       window.open(link, "_blank");
+        window.open(link, "_blank");
       } else {
         const errorData = await response.json();
         console.log("Error data: ", errorData);
@@ -111,11 +111,15 @@ const ViewCoverLetters = () => {
       alert("An error occurred while downloading the resume. Please try again.");
     }
   };
-  
+
+  const handleHomeClick = () => {
+    navigate("/dashboard"); // Navigate to the Dashboard component
+  };
 
   return (
     <div
       style={{
+        position: "relative", // Enables relative positioning for the Home button
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -125,7 +129,35 @@ const ViewCoverLetters = () => {
         color: "#fff",
       }}
     >
-      <h1 style={{ marginBottom: "20px" }}>My Cover Letters</h1>
+      {/* Home Button */}
+      <button
+        onClick={handleHomeClick}
+        style={{
+          position: "absolute",
+          top: "10px",
+          left: "10px",
+          padding: "8px 16px",
+          background: "linear-gradient(to right, #4caf50, #81c784)",
+          border: "none",
+          borderRadius: "5px",
+          color: "#fff",
+          fontSize: "0.8rem",
+          cursor: "pointer",
+          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+          zIndex: 10,
+        }}
+      >
+        Home
+      </button>
+
+      <h1
+        style={{
+          marginTop: "50px", // Add margin to ensure the button doesn't overlap with the heading
+          marginBottom: "20px",
+        }}
+      >
+        My Cover Letters
+      </h1>
 
       {isLoading ? (
         <div style={{ fontSize: "1.5rem", color: "#fff" }}>Loading...</div>

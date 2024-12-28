@@ -258,14 +258,25 @@ const Dashboard = () => {
               maxWidth: "400px",
             }}
           >
-            <h3
-              style={{
-                color: "#007bff",
-                fontSize: "clamp(1.5rem, 3vw, 2rem)",
-              }}
-            >
-              5 Cover Letters Generated
-            </h3>
+            {user && user.coverLettersGenerated > 0 ? (
+              <h3
+                style={{
+                  color: "#007bff",
+                  fontSize: "clamp(1.5rem, 3vw, 2rem)",
+                }}
+              >
+                {user.coverLettersGenerated} Cover Letters Generated
+              </h3>
+            ) : (
+              <h3
+                style={{
+                  color: "#ff416c",
+                  fontSize: "clamp(1.5rem, 3vw, 2rem)",
+                }}
+              >
+                0 Cover Letters Generated
+              </h3>
+            )}
             <p
               style={{
                 fontSize: "clamp(1rem, 2.5vw, 1.2rem)",
@@ -273,7 +284,9 @@ const Dashboard = () => {
                 marginTop: "10px",
               }}
             >
-              Keep generating cover letters and achieve your dream job!
+              {user && user.coverLettersGenerated > 0
+                ? "Keep generating cover letters and achieve your dream job!"
+                : "Generate one today to get started!"}
             </p>
           </div>
         </div>

@@ -25,6 +25,10 @@ const GenerateCoverLetter = () => {
     setCoverLetterFormat(e.target.value);
   };
 
+  const handleHomeClick = () => {
+    navigate("/dashboard"); // Navigate to the Dashboard component
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!resume || !jobDescription || !coverLetterFormat) {
@@ -64,10 +68,11 @@ const GenerateCoverLetter = () => {
         const blob = await response.blob();
 
         const url = window.URL.createObjectURL(blob);
-
+        const coverLetterFormatToBeAttached =
+          coverLetterFormat === "word" ? ".docx" : ".pdf";
         const a = document.createElement("a");
         a.href = url;
-        a.download = `cover-letter.${coverLetterFormat}`;
+        a.download = `cover-letter.${coverLetterFormatToBeAttached}`;
         document.body.appendChild(a);
         a.click();
 
@@ -89,14 +94,37 @@ const GenerateCoverLetter = () => {
   return (
     <div
       style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
+        position: "relative", // Allows absolute positioning of Home button
         minHeight: "100vh",
         background: "linear-gradient(to right, #6a11cb, #2575fc)",
         padding: "20px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
+      {/* Home Button */}
+      <button
+        onClick={handleHomeClick}
+        style={{
+          position: "absolute",
+          top: "20px",
+          left: "20px",
+          padding: "10px 20px",
+          background: "linear-gradient(to right, #4caf50, #81c784)",
+          border: "none",
+          borderRadius: "5px",
+          color: "#fff",
+          fontSize: "0.9rem",
+          cursor: "pointer",
+          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+          transition: "transform 0.3s ease, box-shadow 0.3s ease",
+          zIndex: 10, // Ensure it stays on top of other elements
+        }}
+      >
+        Home
+      </button>
+
       <div
         style={{
           background: "#fff",
@@ -105,7 +133,6 @@ const GenerateCoverLetter = () => {
           boxShadow: "0px 8px 15px rgba(0, 0, 0, 0.1)",
           width: "100%",
           maxWidth: "500px",
-          textAlign: "center",
         }}
       >
         <h2
@@ -113,7 +140,8 @@ const GenerateCoverLetter = () => {
         >
           Generate Cover Letter
         </h2>
-        {isLoading ? ( // Show spinner when loading
+
+        {isLoading ? (
           <div style={{ marginBottom: "20px" }}>
             <div
               className="spinner"
