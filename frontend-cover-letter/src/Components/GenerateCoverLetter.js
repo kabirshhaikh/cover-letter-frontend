@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { Form } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const GenerateCoverLetter = () => {
   const [resume, setResume] = useState(null);
   const [jobDescription, setJobDescription] = useState("");
   const [coverLetterFormat, setCoverLetterFormat] = useState("");
   const [companyName, setCompanyName] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // State to track loading
+  const navigate = useNavigate();
 
   const handleResumeChange = (e) => {
     setResume(e.target.files[0]);
@@ -36,12 +38,24 @@ const GenerateCoverLetter = () => {
     formData.append("coverLetterFormat", coverLetterFormat);
     formData.append("companyName", companyName);
 
+    setIsLoading(true); // Show spinner when the process starts
+
     try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        alert("You are not logged in");
+        navigate("/login");
+        return;
+      }
+
       const response = await fetch(
         "http://localhost:8080/api/cover-letter/generate",
         {
           method: "POST",
-          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
           body: formData,
         }
       );
@@ -67,6 +81,8 @@ const GenerateCoverLetter = () => {
     } catch (error) {
       console.error("Error while submitting the cover letter info:", error);
       alert("An unexpected error occurred. Please try again.");
+    } finally {
+      setIsLoading(false); // Hide spinner when the process finishes
     }
   };
 
@@ -89,6 +105,7 @@ const GenerateCoverLetter = () => {
           boxShadow: "0px 8px 15px rgba(0, 0, 0, 0.1)",
           width: "100%",
           maxWidth: "500px",
+          textAlign: "center",
         }}
       >
         <h2
@@ -96,130 +113,149 @@ const GenerateCoverLetter = () => {
         >
           Generate Cover Letter
         </h2>
-        <form onSubmit={handleSubmit}>
-          {/* Upload Resume */}
+        {isLoading ? ( // Show spinner when loading
           <div style={{ marginBottom: "20px" }}>
-            <label
-              htmlFor="resume"
-              style={{ display: "block", marginBottom: "10px", color: "#666" }}
+            <div
+              className="spinner"
+              style={{ fontSize: "2rem", color: "#6a11cb" }}
             >
-              Upload Resume
-            </label>
-            <input
-              type="file"
-              id="resume"
-              accept=".pdf,.doc,.docx"
-              onChange={handleResumeChange}
+              Loading...
+            </div>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            {/* Upload Resume */}
+            <div style={{ marginBottom: "20px" }}>
+              <label
+                htmlFor="resume"
+                style={{
+                  display: "block",
+                  marginBottom: "10px",
+                  color: "#666",
+                }}
+              >
+                Upload Resume
+              </label>
+              <input
+                type="file"
+                id="resume"
+                accept=".pdf,.doc,.docx"
+                onChange={handleResumeChange}
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  border: "1px solid #ccc",
+                  borderRadius: "5px",
+                }}
+              />
+            </div>
+
+            {/* Job Description */}
+            <div style={{ marginBottom: "20px" }}>
+              <label
+                htmlFor="jobDescription"
+                style={{
+                  display: "block",
+                  marginBottom: "10px",
+                  color: "#666",
+                }}
+              >
+                Job Description
+              </label>
+              <textarea
+                id="jobDescription"
+                rows="5"
+                value={jobDescription}
+                onChange={handleJobDescriptionChange}
+                placeholder="Paste the job description here..."
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  border: "1px solid #ccc",
+                  borderRadius: "5px",
+                }}
+                required
+              ></textarea>
+            </div>
+
+            {/* Company Name */}
+            <div style={{ marginBottom: "20px" }}>
+              <label
+                htmlFor="companyName"
+                style={{
+                  display: "block",
+                  marginBottom: "10px",
+                  color: "#666",
+                }}
+              >
+                Company Name
+              </label>
+              <input
+                type="text"
+                id="companyName"
+                value={companyName}
+                onChange={handleCompanyNameChange}
+                placeholder="Enter the company name"
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  border: "1px solid #ccc",
+                  borderRadius: "5px",
+                }}
+                required
+              />
+            </div>
+
+            {/* Cover Letter Format */}
+            <div style={{ marginBottom: "20px" }}>
+              <label
+                htmlFor="format"
+                style={{
+                  display: "block",
+                  marginBottom: "10px",
+                  color: "#666",
+                }}
+              >
+                Expected Cover Letter Format
+              </label>
+              <select
+                id="format"
+                value={coverLetterFormat}
+                onChange={handleFormatChange}
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  border: "1px solid #ccc",
+                  borderRadius: "5px",
+                }}
+                required
+              >
+                <option value="">Select Format</option>
+                <option value="pdf">PDF</option>
+                <option value="word">Word</option>
+              </select>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
               style={{
                 width: "100%",
-                padding: "10px",
-                border: "1px solid #ccc",
+                padding: "15px",
+                background: "linear-gradient(to right, #ff416c, #ff4b2b)",
+                border: "none",
                 borderRadius: "5px",
+                color: "#fff",
+                fontSize: "1rem",
+                cursor: "pointer",
+                boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                transition: "transform 0.3s ease, box-shadow 0.3s ease",
               }}
-            />
-          </div>
-
-          {/* Job Description */}
-          <div style={{ marginBottom: "20px" }}>
-            <label
-              htmlFor="jobDescription"
-              style={{ display: "block", marginBottom: "10px", color: "#666" }}
             >
-              Job Description
-            </label>
-            <textarea
-              id="jobDescription"
-              rows="5"
-              value={jobDescription}
-              onChange={handleJobDescriptionChange}
-              placeholder="Paste the job description here..."
-              style={{
-                width: "100%",
-                padding: "10px",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-              }}
-              required
-            ></textarea>
-          </div>
-
-          {/* Company Name */}
-          <div style={{ marginBottom: "20px" }}>
-            <label
-              htmlFor="companyName"
-              style={{ display: "block", marginBottom: "10px", color: "#666" }}
-            >
-              Company Name
-            </label>
-            <input
-              type="text"
-              id="companyName"
-              value={companyName}
-              onChange={handleCompanyNameChange}
-              placeholder="Enter the company name"
-              style={{
-                width: "100%",
-                padding: "10px",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-              }}
-              required
-            />
-          </div>
-
-          {/* Cover Letter Format */}
-          <div style={{ marginBottom: "20px" }}>
-            <label
-              htmlFor="format"
-              style={{ display: "block", marginBottom: "10px", color: "#666" }}
-            >
-              Expected Cover Letter Format
-            </label>
-            <select
-              id="format"
-              value={coverLetterFormat}
-              onChange={handleFormatChange}
-              style={{
-                width: "100%",
-                padding: "10px",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-              }}
-              required
-            >
-              <option value="professional"></option>
-              <option value="pdf">pdf</option>
-              <option value="creative">word</option>
-            </select>
-          </div>
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            style={{
-              width: "100%",
-              padding: "15px",
-              background: "linear-gradient(to right, #ff416c, #ff4b2b)",
-              border: "none",
-              borderRadius: "5px",
-              color: "#fff",
-              fontSize: "1rem",
-              cursor: "pointer",
-              boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-              transition: "transform 0.3s ease, box-shadow 0.3s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.transform = "scale(1.05)";
-              e.target.style.boxShadow = "0px 6px 10px rgba(0, 0, 0, 0.2)";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.transform = "scale(1)";
-              e.target.style.boxShadow = "0px 4px 6px rgba(0, 0, 0, 0.1)";
-            }}
-          >
-            Generate Cover Letter
-          </button>
-        </form>
+              Generate Cover Letter
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );

@@ -13,11 +13,19 @@ const Dashboard = () => {
 
   const logout = async () => {
     try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        alert("You not not logged in");
+        navigate("/login");
+        return;
+      }
+
       const response = await fetch("http://localhost:8080/api/users/logout", {
         method: "POST",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -37,19 +45,28 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          alert("You are not logged in");
+          navigate("/login");
+          return;
+        }
+
         const response = await fetch(
           "http://localhost:8080/api/users/user-details",
           {
             method: "GET",
-            credentials: "include",
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
             },
           }
         );
 
         if (response.ok) {
           const data = await response.json();
+          console.log("Data from dashboard", data);
           setUserData(data);
         } else {
           const errorData = await response.json();
@@ -63,7 +80,7 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <FullPage scrollMode="full-page" duration={1000}>
+    <FullPage scrollMode="full-page" duration={800}>
       {/* Slide 1 */}
       <Slide>
         <div

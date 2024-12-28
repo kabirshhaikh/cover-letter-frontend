@@ -22,7 +22,6 @@ const Login = () => {
 
       const response = await fetch("http://localhost:8080/api/users/login", {
         method: "POST",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -31,7 +30,9 @@ const Login = () => {
 
       if (response.ok) {
         const data = await response.json();
+        console.log("Data from backend",data);
         localStorage.setItem("user", data.userId);
+        localStorage.setItem("token", data.token);
         alert("Login successful");
         navigate("/dashboard");
       } else {
