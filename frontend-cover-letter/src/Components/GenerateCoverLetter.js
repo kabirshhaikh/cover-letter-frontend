@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import OptionsMenu from "./OptionsMenu"; // Import the OptionsMenu component
 
 const GenerateCoverLetter = () => {
   const [resume, setResume] = useState(null);
@@ -94,7 +95,7 @@ const GenerateCoverLetter = () => {
   return (
     <div
       style={{
-        position: "relative", // Allows absolute positioning of Home button
+        position: "relative", // Allows absolute positioning for buttons
         minHeight: "100vh",
         background: "linear-gradient(to right, #6a11cb, #2575fc)",
         padding: "20px",
@@ -124,6 +125,9 @@ const GenerateCoverLetter = () => {
       >
         Home
       </button>
+
+      {/* Options Menu */}
+      <OptionsMenu />
 
       <div
         style={{

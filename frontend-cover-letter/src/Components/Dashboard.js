@@ -1,46 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { FullPage, Slide } from "react-full-page";
 import { useNavigate } from "react-router-dom";
+import OptionsMenu from "./OptionsMenu"; // Import the reusable OptionsMenu component
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [user, setUserData] = useState(null);
-
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
-
-  const logout = async () => {
-    try {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        alert("You not not logged in");
-        navigate("/login");
-        return;
-      }
-
-      const response = await fetch("http://localhost:8080/api/users/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.ok) {
-        localStorage.clear();
-        alert("Successfully logged out");
-        navigate("/login");
-      } else {
-        const errorData = await response.json();
-        console.log("Error data:", errorData);
-      }
-    } catch (error) {
-      console.log("Error with logout:", error);
-    }
-  };
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -70,14 +35,14 @@ const Dashboard = () => {
           setUserData(data);
         } else {
           const errorData = await response.json();
-          console.log("error", errorData);
+          console.log("Error:", errorData);
         }
       } catch (error) {
-        console.log("Error while fetching the user data:", error);
+        console.error("Error while fetching the user data:", error);
       }
     };
     fetchUserDetails();
-  }, []);
+  }, [navigate]);
 
   return (
     <FullPage scrollMode="full-page" duration={800}>
@@ -97,72 +62,8 @@ const Dashboard = () => {
             position: "relative",
           }}
         >
-          {/* Dropdown Menu */}
-          <div
-            style={{
-              position: "absolute",
-              top: "20px",
-              right: "20px",
-            }}
-          >
-            <button
-              className="dropdown-toggle"
-              style={{
-                padding: "10px 20px",
-                border: "none",
-                borderRadius: "8px",
-                background: "#ffffff",
-                color: "#6a11cb",
-                fontSize: "1rem",
-                cursor: "pointer",
-              }}
-              onClick={toggleDropdown}
-            >
-              Options
-            </button>
-            {isDropdownOpen && (
-              <div
-                className="dropdown-menu"
-                style={{
-                  position: "absolute",
-                  top: "50px",
-                  right: "0",
-                  background: "#ffffff",
-                  borderRadius: "8px",
-                  boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-                }}
-              >
-                <button
-                  style={{
-                    display: "block",
-                    padding: "10px 15px",
-                    width: "100%",
-                    background: "none",
-                    border: "none",
-                    textAlign: "left",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => navigate("/manage-profile")}
-                >
-                  Manage Profile
-                </button>
-                <button
-                  style={{
-                    display: "block",
-                    padding: "10px 15px",
-                    width: "100%",
-                    background: "none",
-                    border: "none",
-                    textAlign: "left",
-                    cursor: "pointer",
-                  }}
-                  onClick={logout}
-                >
-                  Logout
-                </button>
-              </div>
-            )}
-          </div>
+          {/* OptionsMenu */}
+          <OptionsMenu /> {/* Integrated reusable component */}
 
           <h1
             style={{
@@ -170,7 +71,7 @@ const Dashboard = () => {
               marginBottom: "1rem",
             }}
           >
-            Welcome Back {user ? user.firstName : "null"}
+            Welcome Back {user ? user.firstName : "User"}
           </h1>
           <p
             style={{

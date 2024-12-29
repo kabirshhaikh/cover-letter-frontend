@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import OptionsMenu from "./OptionsMenu"; // Import the OptionsMenu component
 
 const ViewCoverLetters = () => {
   const navigate = useNavigate();
@@ -112,6 +113,44 @@ const ViewCoverLetters = () => {
     }
   };
 
+  const handleDeleteCoverLetter = async (coverLetterId) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("You are not logged in");
+        navigate("/login");
+        return;
+      }
+
+      const response = await fetch(
+        `http://localhost:8080/api/cover-letter/delete-cover-letter/${coverLetterId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const deleteResponse = await response.json();
+        console.log("delete response:", deleteResponse);
+        const deletedS3Url = deleteResponse.s3_url; 
+        alert("Cover letter deleted successfully.");
+        setCoverLetters((prev) =>
+          prev.filter((letter) => letter.s3_url !== deletedS3Url)
+        );
+      } else {
+        const errorData = await response.json();
+        console.log("Error data: ", errorData);
+        alert("Failed to delete the cover letter.");
+      }
+    } catch (error) {
+      console.log("Error while deleting cover letter: ", error);
+      alert("An error occurred. Please try again.");
+    }
+  };
+
   const handleHomeClick = () => {
     navigate("/dashboard"); // Navigate to the Dashboard component
   };
@@ -119,7 +158,7 @@ const ViewCoverLetters = () => {
   return (
     <div
       style={{
-        position: "relative", // Enables relative positioning for the Home button
+        position: "relative", // Enables relative positioning for buttons
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -149,6 +188,9 @@ const ViewCoverLetters = () => {
       >
         Home
       </button>
+
+      {/* Options Menu */}
+      <OptionsMenu />
 
       <h1
         style={{
@@ -196,28 +238,65 @@ const ViewCoverLetters = () => {
                 <button
                   onClick={() => handleCoverLetterDownload(letter.id)}
                   style={{
-                    padding: "10px 15px",
+                    padding: "8px 12px",
                     background: "linear-gradient(to right, #ff416c, #ff4b2b)",
                     border: "none",
-                    borderRadius: "5px",
+                    borderRadius: "3px",
                     color: "#fff",
+                    fontSize: "0.9rem",
                     cursor: "pointer",
+                    transition: "transform 0.2s ease",
                   }}
+                  onMouseEnter={(e) =>
+                    (e.target.style.transform = "scale(1.05)")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.target.style.transform = "scale(1)")
+                  }
                 >
                   Download Cover Letter
                 </button>
                 <button
                   onClick={() => handleResumeDownload(letter.resume.id)}
                   style={{
-                    padding: "10px 15px",
+                    padding: "8px 12px",
                     background: "linear-gradient(to right, #4caf50, #81c784)",
                     border: "none",
-                    borderRadius: "5px",
+                    borderRadius: "3px",
                     color: "#fff",
+                    fontSize: "0.9rem",
                     cursor: "pointer",
+                    transition: "transform 0.2s ease",
                   }}
+                  onMouseEnter={(e) =>
+                    (e.target.style.transform = "scale(1.05)")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.target.style.transform = "scale(1)")
+                  }
                 >
                   Download Resume
+                </button>
+                <button
+                  onClick={() => handleDeleteCoverLetter(letter.id)}
+                  style={{
+                    padding: "8px 12px",
+                    background: "linear-gradient(to right, #f44336, #e57373)",
+                    border: "none",
+                    borderRadius: "3px",
+                    color: "#fff",
+                    fontSize: "0.9rem",
+                    cursor: "pointer",
+                    transition: "transform 0.2s ease",
+                  }}
+                  onMouseEnter={(e) =>
+                    (e.target.style.transform = "scale(1.05)")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.target.style.transform = "scale(1)")
+                  }
+                >
+                  Delete Cover Letter
                 </button>
               </div>
             </div>

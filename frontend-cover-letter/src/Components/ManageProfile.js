@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import OptionsMenu from "./OptionsMenu"; // Import the OptionsMenu component
 
 const ManageProfile = () => {
   const [email, setEmail] = useState("");
@@ -87,6 +88,10 @@ const ManageProfile = () => {
     }
   };
 
+  const handleHomeClick = () => {
+    navigate("/dashboard");
+  };
+
   return (
     <div
       style={{
@@ -98,9 +103,36 @@ const ManageProfile = () => {
         background: "linear-gradient(to right, #6a11cb, #2575fc)",
         color: "#fff",
         padding: "20px",
+        position: "relative",
       }}
     >
+      {/* Home Button */}
+      <button
+        onClick={handleHomeClick}
+        style={{
+          position: "absolute",
+          top: "20px",
+          left: "20px",
+          padding: "10px 20px",
+          borderRadius: "5px",
+          border: "none",
+          background: "linear-gradient(to right, #4caf50, #81c784)",
+          color: "#fff",
+          cursor: "pointer",
+          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        Home
+      </button>
+
+      {/* Options Menu */}
+      <OptionsMenu />
+
       <h2 style={{ marginBottom: "20px" }}>Manage Profile</h2>
+      <p style={{ maxWidth: "400px", textAlign: "center", marginBottom: "20px" }}>
+        Here, you can reset your password by first requesting a verification code
+        and then entering a new password.
+      </p>
       {step === 1 ? (
         <div style={{ maxWidth: "400px", width: "100%", textAlign: "center" }}>
           <h3>Send Verification Code</h3>
