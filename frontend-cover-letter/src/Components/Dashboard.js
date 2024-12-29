@@ -142,7 +142,7 @@ const Dashboard = () => {
                     textAlign: "left",
                     cursor: "pointer",
                   }}
-                  onClick={() => navigate("/profile")}
+                  onClick={() => navigate("/manage-profile")}
                 >
                   Manage Profile
                 </button>
