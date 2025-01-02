@@ -109,7 +109,9 @@ const ViewCoverLetters = () => {
       }
     } catch (error) {
       console.log("Error while downloading resume: ", error);
-      alert("An error occurred while downloading the resume. Please try again.");
+      alert(
+        "An error occurred while downloading the resume. Please try again."
+      );
     }
   };
 
@@ -133,13 +135,11 @@ const ViewCoverLetters = () => {
       );
 
       if (response.ok) {
-        const deleteResponse = await response.json();
-        console.log("delete response:", deleteResponse);
-        const deletedS3Url = deleteResponse.s3_url; 
-        alert("Cover letter deleted successfully.");
+        // Immediately update the state to reflect the deletion
         setCoverLetters((prev) =>
-          prev.filter((letter) => letter.s3_url !== deletedS3Url)
+          prev.filter((letter) => letter.id !== coverLetterId)
         );
+        alert("Cover letter deleted successfully.");
       } else {
         const errorData = await response.json();
         console.log("Error data: ", errorData);
@@ -250,9 +250,7 @@ const ViewCoverLetters = () => {
                   onMouseEnter={(e) =>
                     (e.target.style.transform = "scale(1.05)")
                   }
-                  onMouseLeave={(e) =>
-                    (e.target.style.transform = "scale(1)")
-                  }
+                  onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
                 >
                   Download Cover Letter
                 </button>
@@ -271,9 +269,7 @@ const ViewCoverLetters = () => {
                   onMouseEnter={(e) =>
                     (e.target.style.transform = "scale(1.05)")
                   }
-                  onMouseLeave={(e) =>
-                    (e.target.style.transform = "scale(1)")
-                  }
+                  onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
                 >
                   Download Resume
                 </button>
@@ -292,9 +288,7 @@ const ViewCoverLetters = () => {
                   onMouseEnter={(e) =>
                     (e.target.style.transform = "scale(1.05)")
                   }
-                  onMouseLeave={(e) =>
-                    (e.target.style.transform = "scale(1)")
-                  }
+                  onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
                 >
                   Delete Cover Letter
                 </button>
